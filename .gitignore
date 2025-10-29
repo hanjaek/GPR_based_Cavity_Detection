@@ -1,0 +1,57 @@
+# ========== Python & Environment ==========
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+*.egg
+env/
+venv/
+.venv/
+ENV/
+env.bak/
+
+# ========== IDE / Editor ==========
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# ========== OS Specific ==========
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ========== Jupyter / Logs ==========
+.ipynb_checkpoints/
+*.log
+*.out
+*.err
+
+# ========== Dataset & Output ==========
+data/
+outputs/checkpoints/
+outputs/logs/
+outputs/predictions/
+
+# ========== Temporary Files ==========
+*.tmp
+*.bak
+*.swp
+*.old
+
+# ========== Model Weights ==========
+*.pth
+*.pt
+
+# ========== Images / Visualizations ==========
+*.png
+*.jpg
+*.jpeg
+*.bmp
+*.tif
+*.tiff
+
+# ========== Misc ==========
+__MACOSX/
