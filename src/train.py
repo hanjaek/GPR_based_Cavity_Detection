@@ -1,9 +1,10 @@
+import os
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
+
 from dataset import GPRCavityDataset
 from model import UNet
-import os
 
 # ---------------- Dice Loss Function ----------------
 def dice_loss(pred, target, eps=1e-6):
@@ -22,9 +23,9 @@ def train_step(model, loader, optimizer, bce_loss_fn, device):
         images = images.to(device)
         masks = masks.to(device)
 
-        preds = model(images)
-        bce = bce_loss_fn(preds, masks)
-        dsc = dice_loss(preds, masks)
+        preds = model(images)              # (B,1,H,W) logits
+        bce = bce_loss_fn(preds, masks)    # BCEWithLogitsLoss
+        dsc = dice_loss(preds, masks)      # Dice loss
         loss = bce + dsc
 
         optimizer.zero_grad()
@@ -37,12 +38,14 @@ def train_step(model, loader, optimizer, bce_loss_fn, device):
 
 # ---------------- Main Training Loop ----------------
 def main():
-    data_dir = "./data"
+    # 이 경로만 바뀜: 이제 cavity 전체를 root로 사용
+    data_root = "./data/cavity"
+
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"✅ Using device: {device}")
 
     # ---------------- Dataset & DataLoader ----------------
-    dataset = GPRCavityDataset(root_dir=data_dir, transform=None)
+    dataset = GPRCavityDataset(root_dir=data_root, transform=None)
     loader = DataLoader(dataset, batch_size=2, shuffle=True)
 
     # ---------------- Model & Optimizer ----------------
@@ -58,7 +61,9 @@ def main():
         avg_loss = train_step(model, loader, optimizer, bce_loss_fn, device)
         print(f"[Epoch {epoch+1}/{epochs}] Loss: {avg_loss:.4f}")
 
-        torch.save(model.state_dict(), f"./outputs/checkpoints/epoch_{epoch+1}.pth")
+        # epoch별 가중치 저장
+        ckpt_path = f"./outputs/checkpoints/epoch_{epoch+1}.pth"
+        torch.save(model.state_dict(), ckpt_path)
 
     print("🎉 Training Complete!")
 

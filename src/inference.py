@@ -6,57 +6,68 @@ import numpy as np
 
 from model import UNet
 
-# ---------------- 이미지 전처리 함수 ----------------
-def load_image(path):
+# ---------------- 단일 이미지 로딩 ----------------
+def load_image_as_tensor(path):
     img = Image.open(path).convert("RGB")
     img_np = np.array(img, dtype=np.uint8)
-    img_t = torch.tensor(img_np).permute(2, 0, 1).float() / 255.0
-    return img_t.unsqueeze(0)  # [1,3,H,W]
+    img_t = torch.tensor(img_np).permute(2, 0, 1).float() / 255.0  # [3,H,W]
+    return img_t.unsqueeze(0)  # [1,3,H,W] 배치 차원 추가
 
-# ---------------- 예측 시각화 ----------------
-def predict_and_save(model, image_dir, save_dir, device):
-    os.makedirs(save_dir, exist_ok=True)
+# ---------------- 예측 및 저장 ----------------
+def run_inference_on_cavity(model, cavity_root, save_root, device):
+    os.makedirs(save_root, exist_ok=True)
 
-    img_files = sorted([
-        f for f in os.listdir(image_dir)
-        if f.lower().endswith((".jpg", ".png", ".jpeg", ".bmp"))
-    ])
+    # cavity_root 예: ./data/cavity
+    for site_name in sorted(os.listdir(cavity_root)):
+        site_path = os.path.join(cavity_root, site_name)
+        img_dir = os.path.join(site_path, "images")
 
-    model.eval()
-    with torch.no_grad():
-        for fname in img_files:
-            img_path = os.path.join(image_dir, fname)
-            image = load_image(img_path).to(device)
+        if not os.path.isdir(img_dir):
+            continue
 
-            # 모델 예측
-            pred = model(image)
-            pred_sig = torch.sigmoid(pred)
+        for fname in sorted(os.listdir(img_dir)):
+            if not fname.lower().endswith((".jpg", ".jpeg", ".png", ".bmp")):
+                continue
 
-            # 임계값 0.5 이상인 부분만 공동(1)
-            pred_mask = (pred_sig > 0.5).float()
+            img_path = os.path.join(img_dir, fname)
 
-            # 저장 경로
-            save_path = os.path.join(save_dir, fname.replace(".jpg", "_pred.png"))
+            # 이미지 로드
+            image = load_image_as_tensor(img_path).to(device)
+
+            # 예측
+            model.eval()
+            with torch.no_grad():
+                pred_logits = model(image)          # [1,1,H,W] (raw logits)
+                pred_prob   = torch.sigmoid(pred_logits)
+                pred_mask   = (pred_prob > 0.5).float()  # binary mask
+
+            # 저장 파일명 예:
+            # site_001_001_1_pred.png
+            base = os.path.splitext(fname)[0]  # 001_1
+            save_name = f"{site_name}_{base}_pred.png"
+            save_path = os.path.join(save_root, save_name)
+
             save_image(pred_mask, save_path)
             print(f"✅ Saved: {save_path}")
 
-# ---------------- 메인 실행부 ----------------
+# ---------------- main ----------------
 def main():
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"🔍 Using device: {device}")
 
-    # 모델 로드
+    # 모델 준비
     model = UNet(in_channels=3, out_channels=1).to(device)
-    checkpoint_path = "./outputs/checkpoints/epoch_50.pth"  # <-- 경로 조정 가능
+
+    checkpoint_path = "./outputs/checkpoints/epoch_50.pth"  # 필요시 바꿔
     model.load_state_dict(torch.load(checkpoint_path, map_location=device))
     print(f"📦 Loaded checkpoint: {checkpoint_path}")
 
-    # 예측 실행
-    image_dir = "./data/images"
-    save_dir = "./outputs/predictions"
-    predict_and_save(model, image_dir, save_dir, device)
+    cavity_root = "./data/cavity"
+    save_root   = "./outputs/predictions"
 
-    print("🎉 Inference complete! Results saved to outputs/predictions/")
+    run_inference_on_cavity(model, cavity_root, save_root, device)
+
+    print("🎉 Inference complete! Check outputs/predictions/")
 
 if __name__ == "__main__":
     main()
