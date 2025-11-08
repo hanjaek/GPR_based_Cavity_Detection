@@ -1,7 +1,7 @@
 # (권장) 가상환경 + 의존성 설치를 먼저 했다면---------------------------------
 
 1
-ai_hub/src/yolov5_master
+cd ai_hub/src/yolov5_master
 2
 python detect.py --weights "../../model/yz_weights/best.pt" --source "../../../data/cavity/" --imgsz 640 --conf-thres 0.4 --device cpu --save-txt --save-conf    
 
