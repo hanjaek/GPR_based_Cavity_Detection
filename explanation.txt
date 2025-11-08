@@ -3,8 +3,11 @@
 1
 cd ai_hub/src/yolov5_master
 2
-python detect.py --weights "../../model/yz_weights/best.pt" --source "../../../data/cavity/" --imgsz 640 --conf-thres 0.4 --device cpu --save-txt --save-conf    
+.\yolo311\Scripts\Activate
+3
+python detect.py --weights "../../model/yz_weights/best.pt" --source "C:/Users/hjk25/gpr_to_cavity/test_data" --imgsz 640 --conf-thres 0.4 --device 0 --half --save-txt --save-conf
 
+======================== 설명 ========================
 폴더 안에 GPR 단면 이미지 파일(.jpg, .png, .jpeg, .bmp 등) 만 넣어두면 됨.
 파일 이름은 아무 이름이나 상관 X
 
