@@ -16,7 +16,7 @@ MAX_DEPTH_M    = 5.0    # 한 이미지의 최대 깊이 (Z축) ≒ 5 m 가정
 # 2) 경로 설정
 # ===========================
 IMG_DIR   = r"C:\Users\hjk25\gpr_to_cavity\test_data"
-LABEL_DIR = r"C:\Users\hjk25\gpr_to_cavity\ai_hub\src\yolov5_master\runs\detect\exp4\labels"
+LABEL_DIR = r"C:\Users\hjk25\gpr_to_cavity\ai_hub\src\yolov5_master\runs\detect\exp\labels"
 
 # ===========================
 # 3) 001번 site만 선택
