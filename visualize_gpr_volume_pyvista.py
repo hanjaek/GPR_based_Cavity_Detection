@@ -2,68 +2,63 @@ import os
 import json
 import numpy as np
 import pyvista as pv
-from pyvista import ImageData   # ★ UniformGrid 대신 ImageData
+from pyvista import ImageData
 
-print("DEBUG: visualize_gpr_volume_pyvista.py v2")  # ★ 이 줄 보이면 새 코드 맞음
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+OUT = os.path.join(BASE_DIR, "outputs")
 
-# -----------------------
-# paths
-# -----------------------
-BASE_DIR   = os.path.dirname(os.path.abspath(__file__))
-OUTPUT_DIR = os.path.join(BASE_DIR, "outputs")
+vol_path  = os.path.join(OUT, "gpr_volume_preprocessed.npy")
+meta_path = os.path.join(OUT, "gpr_volume_preprocessed_meta.json")
 
-# use preprocessed volume (recommended)
-vol_path  = os.path.join(OUTPUT_DIR, "gpr_volume_preprocessed.npy")
-meta_path = os.path.join(OUTPUT_DIR, "gpr_volume_preprocessed_meta.json")
-
-# fall back to raw volume if preprocessed not found
 if not os.path.exists(vol_path):
-    print("[WARN] preprocessed volume not found, using raw volume.")
-    vol_path  = os.path.join(OUTPUT_DIR, "gpr_volume_norm.npy")
-    meta_path = os.path.join(OUTPUT_DIR, "gpr_volume_meta.json")
+    print("[WARN] using raw")
+    vol_path  = os.path.join(OUT, "gpr_volume_norm.npy")
+    meta_path = os.path.join(OUT, "gpr_volume_meta.json")
 
-volume = np.load(vol_path)  # (S, H, W)
-with open(meta_path, "r") as f:
+volume = np.load(vol_path)
+with open(meta_path) as f:
     meta = json.load(f)
 
-print("Loaded volume:", volume.shape)
+print("Loaded:", volume.shape)
 
 S, H, W = volume.shape
 
-dx = meta["spacing"].get("dx_m", 1.0)
-dy = meta["spacing"].get("dy_m", 1.0)
-dz = meta["spacing"].get("dz_m", 1.0)
+# depth crop (top noise 제거)
+z_min = int(H * 0.10)
+z_max = int(H * 0.95)
+volume = volume[:, z_min:z_max, :]
+H = volume.shape[1]
 
-# -----------------------
-# build pyvista ImageData (UniformGrid 대체)
-# -----------------------
-# Map: X -> slices, Y -> along-track, Z -> depth
-nx, ny, nz = S, W, volume.shape[1]
+# spacing per pixel
+total_y = meta["spacing"]["dy_m"]
+total_z = meta["spacing"]["dz_m"]
+dx = meta["spacing"]["dx_m"]
+dy = total_y / (W - 1)
+dz = total_z / (H - 1)
 
-grid = ImageData()                    # ★ 더 이상 pv.UniformGrid 안 씀
-grid.dimensions = (nx, ny, nz)        # number of points in x, y, z
-grid.spacing    = (dx, dy, dz)        # physical spacing
-grid.origin     = (0.0, 0.0, 0.0)
+nx, ny, nz = S, W, H
 
-# PyVista expects data flattened in C-order matching dimensions
-# current volume: (S, H, W) = (X, Z, Y)
-# → (X, Y, Z) 로 바꿔서 flatten
-scalars = volume.transpose(0, 2, 1).ravel(order="C")
+grid = ImageData()
+grid.dimensions = (nx, ny, nz)
+grid.spacing = (dx, dy, dz)
+grid.origin = (0,0,0)
+
+scalars = volume.transpose(0,2,1).ravel(order="C")
 grid["Intensity"] = scalars
 
-# -----------------------
-# volume rendering
-# -----------------------
-pl = pv.Plotter()
-pl.add_volume(
-    grid,
-    scalars="Intensity",
-    opacity="sigmoid",     # smooth transparency
-    cmap="viridis",        # color map
-)
+# better opacity curve
+opacity = [0.0, 0.0, 0.05, 0.15, 0.35, 0.65, 1.0]
 
-pl.add_axes(line_width=2)
-pl.add_bounding_box()
-pl.add_text("3D GPR Volume", font_size=12)
+p = pv.Plotter()
+p.add_volume(grid, scalars="Intensity",
+             cmap="viridis", opacity=opacity)
 
-pl.show()
+p.add_axes()
+p.add_bounding_box()
+p.add_text("GPR Ground Volume + Internal Reflectors", font_size=12)
+
+# aspect fix (중요!)
+p.set_scale(1.0, 7.0, 12.0)
+p.camera.zoom(1.8)
+
+p.show()
