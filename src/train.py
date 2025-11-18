@@ -68,8 +68,8 @@ def main():
     # --------------------------------------------------
     # 경로 설정 (src 기준)
     # --------------------------------------------------
-    img_root = "../data/cavity"
-    mask_root = "../data_mask/cavity"
+    img_root = "../data2"
+    mask_root = "../data2_mask"
 
     batch_size = 4
     lr = 1e-3

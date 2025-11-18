@@ -29,7 +29,7 @@ class GPRCavityDataset(Dataset):
         self.transform = transform
 
         # --------------------------------------------------
-        # site_001 ~ site_032 폴더 자동 탐색
+        # 폴더 자동 탐색
         # --------------------------------------------------
         site_dirs = sorted(glob.glob(os.path.join(img_root, "site_*")))
 
