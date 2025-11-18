@@ -19,8 +19,8 @@ class GPRCavityDataset(Dataset):
     """
     ==================================================
     GPR + Mask 쌍을 로딩하는 Dataset 클래스
-    - 이미지:  data/cavity/site_xxx/xxx.jpg
-    - 마스크:  data_mask/cavity/site_xxx/xxx.jpg
+    - 이미지:  data2/xxx.jpg
+    - 마스크:  data2_mask/xxx_mask.jpg
     ==================================================
     """
 
