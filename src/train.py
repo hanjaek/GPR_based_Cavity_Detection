@@ -8,8 +8,8 @@ from torch.utils.data import DataLoader, random_split
 import torch.nn as nn
 import torch.optim as optim
 
-from dataset_gpr import GPRCavityDataset
-from model_unet import UNet
+from dataset import GPRCavityDataset
+from model import UNet
 
 
 # ==================================================
