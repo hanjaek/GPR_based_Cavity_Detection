@@ -1,0 +1,90 @@
+
+[1] Dataset 구축 (dataset_gpr.py)
+
+train_unet.py 실행 시 자동으로 호출됨.
+
+기능:
+
+data/cavity 안의 모든 site_xxx 폴더 탐색
+
+각 이미지 파일 읽기
+
+data_mask/cavity에서 동일 이름의 mask와 매칭
+
+(image, mask) pair 리스트 생성
+
+즉, “이미지↔마스크 매칭 데이터셋” 구성 단계.
+
+==============================================
+[2] 모델 생성 (model_unet.py)
+
+train_unet.py가 불러와서 메모리에 로드.
+
+경량화된 UNet 구조:
+
+Encoder (Down)
+
+Bottleneck
+
+Decoder (Up)
+
+Output layer
+
+목적: GPR 이미지 → cavity 픽셀 단위 segmentation mask 생성.
+
+==============================================
+[3] 학습 단계 (train_unet.py)
+
+실행 명령:
+cd src
+python train_unet.py
+
+전체 과정:
+
+Dataset 로드 → 총 pair 수 확보
+
+80% / 20% 비율로 train/val split
+
+DataLoader 준비
+
+UNet 모델 생성
+
+손실함수(BCEWithLogitsLoss) + Adam optimizer 설정
+
+총 30 epoch 학습
+
+Train step: 모델 업데이트
+
+Validation step: 학습되지 않은 20% 데이터로 성능 확인
+
+가장 좋은 val_loss 모델을:
+../checkpoints/unet_best.pth
+에 자동 저장.
+
+=> 최종 출력물: 학습된 segmentation 모델(UNet) 파일.
+
+==============================================
+[4] 추론 단계 (inference_unet.py)
+
+사용 목적:
+
+학습된 모델이 새로운 GPR 이미지에서 cavity mask를 얼마나 잘 예측하는지 확인.
+
+실행 명령:
+cd src
+python inference_unet.py --input ../경로/새이미지.jpg
+
+동작:
+
+../checkpoints/unet_best.pth 로드
+
+입력 이미지 grayscale → tensor 변환
+
+모델 forward → cavity 확률 맵(prob map) 생성
+
+threshold(0.5) → binary mask 생성
+
+결과 파일 저장:
+../prediction_img/입력파일명_mask.png
+
+=> 완전히 새로운 GPR 이미지도 mask 자동 생성 가능.
