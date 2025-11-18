@@ -24,3 +24,14 @@ XZ 모델은 XZ 단면만 인식
 
 가능한 수준: “지하 구조의 형태를 3D로 시각화”
 지금 가진 출력물(JSON 또는 .txt 바운딩박스) 만으로 충분
+
+=====================데이터 준비=====================
+
+1. python detect.py --weights "../../model/yz_weights/best.pt" --source "C:/Users/hjk25/gpr_to_cavity/test_data" --imgsz 640 --conf-thres 0.4 --device 0 --half --save-txt --save-conf
+-> 형태로 GPR 계측 데이터를 탐지
+
+2. filter_cavity_images.py 파일을 이용해 위의 탐지 결과를 바탕으로 cavity로 분류된 원본 데이터를 classification_cavity_img에 저장
+
+====================mask 작업 실시====================
+
+1. batch_inference.py을 통해 classification_cavity_img 저장된 GPR 데이터를 masking 작업 실시
