@@ -6,7 +6,7 @@ import pyvista as pv
 # 1) 경로 설정
 # ================================================================
 THIS_DIR = Path(__file__).resolve().parent
-VOLUME_PATH = THIS_DIR / "cavity_volume_test.npy"
+VOLUME_PATH = THIS_DIR / "cavity_volume_test1.npy"
 
 # ================================================================
 # 2) 실제 공간 스케일 설정

@@ -3,7 +3,7 @@ from pathlib import Path
 import pyvista as pv
 
 THIS_DIR = Path(__file__).resolve().parent
-VOLUME_PATH = THIS_DIR / "cavity_volume_test.npy"
+VOLUME_PATH = THIS_DIR / "cavity_volume_test1.npy"
 
 # 도로 비율용 스페이싱 (상대 비율만 맞으면 됨)
 # X: 진행 방향(도로 길이) → 길게
