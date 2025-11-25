@@ -11,7 +11,7 @@ PROJECT_ROOT = THIS_DIR.parent
 
 # 마스크 이미지들이 들어 있는 폴더
 # (필요하면 여기 경로만 바꿔서 재사용하면 됨)
-MASK_DIR = PROJECT_ROOT / "test" / "test2"
+MASK_DIR = PROJECT_ROOT / "test" / "test3"
 
 # 지원하는 이미지 확장자
 IMG_EXTENSIONS = {".png", ".jpg", ".jpeg", ".bmp"}
