@@ -83,4 +83,17 @@ gpr_to_cavity/
 │   └── src/yolov5_master/          # (외부) AI Hub GPR 탐지 모델 코드 & weights
 │       └── runs/detect/exp*/labels # YOLO detection 결과(txt)
 │
+├── visualization/                  # 예측된 mask들을 3D cavity volume으로 시각화/변환하는 모듈
+│   ├── build_cavity_volume.py      # mask들을 쌓아 3D cavity voxel volume 생성
+│   ├── view_cavity_volume.py       # PyVista 기반 3D cavity 렌더링
+│   ├── view_cavity_slices_spacing.py # slice 간격/보간 실험용 시각화
+│   └── cavity_volume.npy           # 생성된 3D voxel cavity 데이터
+│
+├── outputs/
+│   └── prediction_img/             # batch inference로 생성된 예측 mask 이미지 저장 폴더
+│
+├── note/                           # 실험 과정에서의 메모/기록 파일 모음
+│
+├── test/                           # 테스트용 코드 및 샘플 이미지/스크립트
+│
 └── README.md
