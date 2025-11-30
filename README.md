@@ -9,23 +9,27 @@
 
 지표투과레이더(Ground Penetrating Radar, GPR)는 지하 공동(cavity), 공사 구멍, 매설물 등을 탐지할 수 있는 비파괴 검사 기술입니다.  
 하지만 수천 장에 이르는 GPR 단면을 **전문가가 한 장씩 눈으로 판독**하는 것은 시간이 많이 들고, 사람마다 결과가 달라질 수 있습니다.
+또한 연속 단면 사이에는 약 50cm 간격의 공백이 존재해, 공동이 실제로 이어져 있음에도 2D 단면에서는 끊어진 형태로 보이는 문제가 있습니다.
 
 이 프로젝트는 다음과 같은 흐름으로 문제를 해결합니다.
 
 1. **대량 GPR 연속 단면(연속 MALA 데이터)** 에 대해  
    AI Hub GPR 데이터로 학습된 **YOLO 기반 분류·탐지 모델**을 사용해  
    ⇒ 공동(cavity)이 탐지된 단면만 자동으로 골라냄.
-2. 골라낸 cavity 단면들을 모아 **세그멘테이션용 데이터셋(data2 / data2_mask)** 을 만들고,
+2. 골라낸 cavity 단면들을 모아 **세그멘테이션용 데이터셋(data / data_mask)** 을 만들고,
 3. **U-Net 기반 segmentation 모델**을 학습하여  
    ⇒ 각 단면에서 cavity의 **정확한 형태를 pixel 단위 mask로 예측**.
 4. 예측된 mask는 이후 3D GPR 볼륨/지반 붕괴 시뮬레이션의 입력으로 사용할 수 있도록 설계.
+5. 단면 간 50cm 간격으로 인해 끊어져 보이는 영역을 **SDT(Signed Distance Transform) 기반 보간**으로 
+   자연스럽게 연결하여 실제 지하 공동과 유사한 연속 3D cavity structure 복원
+6. 최종적으로 복원된 cavity volume을 PyVista로 3D 시각화
 
 ---
 
 ## 🔁 전체 파이프라인 (High-Level Pipeline)
 
 1. **연속 GPR 데이터 수집**
-   - 예: `continuous_data/cavity_yz_MALA_000001.jpg` ~ `..._002000.jpg`
+   - 예: `gpr_data/cavity_yz_MALA_000001.jpg` ~ `..._002000.jpg`
 
 2. **1단계 – 객체 탐지 / 분류 (YOLO, AI Hub 기반)**
    - AI Hub에서 제공하는 GPR dataset + 사전 학습된 YOLOv5 모델 사용
@@ -48,6 +52,15 @@
    - 입력: `classification_cavity_img/*`  
    - 출력: `classification_cavity_mask/*_mask.png`
    - 나중에 이 mask들을 slice 방향으로 쌓아서 3D cavity volume을 만들 수 있음.
+
+6. **SDT 기반 단면 보간 및 3D cavity 복원**
+   - mask 단면 사이의 50cm 공백을 SDT로 연속 매핑
+   - slice 간 중간 단면을 생성하여 끊어져 보이던 cavity 구조를 부드럽게 연결
+   - 복원된 3D cavity volume을 PyVista로 시각화
+
+---
+
+## 📡 GPR Cavity Analysis Workflow (Full Pipeline)
 
 ---
 
