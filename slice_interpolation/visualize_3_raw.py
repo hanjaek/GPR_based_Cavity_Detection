@@ -80,7 +80,7 @@ def main():
     p.camera_position = "iso"
 
     # 인터랙티브 창 띄우면서 동시에 PNG로 저장
-    p.show(screenshot=str(ROOT_DIR / "3slices_raw.png"))
+    p.show()
     print(f"[INFO] Screenshot saved to: {ROOT_DIR / '3slices_raw.png'}")
 
 
