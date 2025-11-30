@@ -1,7 +1,9 @@
-# 🛰️ GPR Cavity Segmentation
+# 🛰️ GPR 3D Cavity Reconstruction
 
-> 연속 GPR(B-scan) 데이터에서 **공동(cavity)** 가 포함된 단면을 자동으로 골라내고,  
-> 선택된 단면에 대해 **pixel-level cavity mask** 를 생성하는 2-단계 딥러닝 파이프라인
+> 연속 GPR(B-scan) 데이터에서 공동(cavity) 가 포함된 단면을 자동 탐지하고,
+> 선택된 단면으로부터 pixel-level segmentation mask 를 생성한 뒤,
+> 단면 간 50cm 간격으로 인해 끊어져 보이는 cavity 구조를 SDT(Signed Distance Transform) 기반 보간으로
+> 자연스럽게 연결하여 실제 지하 지형과 유사한 3D cavity volume을 복원·시각화하는 End-to-End 딥러닝 파이프라인
 
 ---
 
