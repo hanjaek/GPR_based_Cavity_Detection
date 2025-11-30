@@ -62,6 +62,70 @@
 
 ## 📡 GPR Cavity Analysis Workflow (Full Pipeline)
 
+### 1) GPR 전처리 및 cavity 마스킹
+
+<div align="center">
+
+<table>
+  <tr>
+    <td align="center">
+      <img src="img/1_gpr_original.jpg" width="220"><br>
+    </td>
+    <td align="center">
+      <img src="img/2_gpr_cavity_detection.jpg" width="220"><br>
+    </td>
+    <td align="center">
+      <img src="img/3_gpr_mask.png" width="220"><br>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <sub><b>Step 1. 원본 GPR 연속 단면</b></sub>
+    </td>
+    <td align="center">
+      <sub><b>Step 2. YOLO 기반 cavity 탐지</b></sub>
+    </td>
+    <td align="center">
+      <sub><b>Step 3. U-Net 기반 cavity 마스크 생성</b></sub>
+    </td>
+  </tr>
+</table>
+
+</div>
+
+---
+
+### 2) SDT 보간 기반 3D cavity 복원
+
+<div align="center">
+
+<table>
+  <tr>
+    <td align="center">
+      <img src="img/4_gpr_mask_connection.png" width="220"><br>
+    </td>
+    <td align="center">
+      <img src="img/5_gpr_mask_interpolation.png" width="220"><br>
+    </td>
+    <td align="center">
+      <img src="img/6_final_3D_cavity.png" width="220"><br>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <sub><b>Step 4. 계측 간격(50cm)으로 배치된 mask 단면</b></sub>
+    </td>
+    <td align="center">
+      <sub><b>Step 5. SDT 보간으로 단면 사이 공백 연속화</b></sub>
+    </td>
+    <td align="center">
+      <sub><b>Step 6. 보간 volume 기반 최종 3D 공동 복원</b></sub>
+    </td>
+  </tr>
+</table>
+
+</div>
+
 ---
 
 ## 📂 폴더 구조 (Project Structure)
