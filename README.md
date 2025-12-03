@@ -182,7 +182,8 @@ gpr_to_cavity/
 ├── test/                           # 테스트용 코드 및 샘플 이미지/스크립트
 │
 └── README.md
-</details> ```
+```
+</details>
 
 --- 
 
