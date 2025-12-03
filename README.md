@@ -189,24 +189,24 @@ gpr_to_cavity/
 
 ## 🚀 향후 개선 사항 (Future Improvements)
 1. **Multi-Frequency / Multi-Orientation 융합**
-  - 단일 주파수·단일 방향 분석에서 벗어나,
-    Dual/Multi-frequency 및 다른 방향(YX, ZX) GPR 단면을 함께 활용하여
-    더 정확한 3D 지하 구조 복원이 가능합니다.
+   - 단일 주파수·단일 방향 분석에서 벗어나,
+     Dual/Multi-frequency 및 다른 방향(YX, ZX) GPR 단면을 함께 활용하여
+     더 정확한 3D 지하 구조 복원이 가능합니다.
 
 2. **SDT 보간 → Neural Implicit Field 기반 3D 복원**
-  - 현재는 SDT(Signed Distance Transform) 보간을 사용하고 있으나,
-    Neural SDF, NeRF 등 Neural Implicit Representation을 도입하면
-    더 자연스럽고 실제 지반과 유사한 3D cavity mesh 생성이 가능합니다.
+   - 현재는 SDT(Signed Distance Transform) 보간을 사용하고 있으나,
+     Neural SDF, NeRF 등 Neural Implicit Representation을 도입하면
+     더 자연스럽고 실제 지반과 유사한 3D cavity mesh 생성이 가능합니다.
 
 3. **GPR Raw Signal(Time-Series) 분석 활용**
-  - Amplitude 이미지(B-scan)뿐 아니라
-    원시 GPR 파형(Time-Series)을 함께 분석하면 재질 구분, 깊이 기반 반사 특성 분석, 노이즈 저감 등 고도화된 지반 분석이 가능해집니다.
+   - Amplitude 이미지(B-scan)뿐 아니라
+     원시 GPR 파형(Time-Series)을 함께 분석하면 재질 구분, 깊이 기반 반사 특성 분석, 노이즈 저감 등 고도화된 지반 분석이 가능해집니다.
 
 4. **실시간 GPR Mapping 시스템으로 확장**
-  - UGV/RC카 기반 플랫폼에 GPR을 탑재하여
-    실시간 탐사 → 자동 분석 → 3D cavity 생성 → 위험 구간 표시
-    까지 수행하는 end-to-end 시스템으로 확장할 수 있습니다.
+   - UGV/RC카 기반 플랫폼에 GPR을 탑재하여
+     실시간 탐사 → 자동 분석 → 3D cavity 생성 → 위험 구간 표시
+     까지 수행하는 end-to-end 시스템으로 확장할 수 있습니다.
 
 5. **FEA 기반 지반 붕괴 시뮬레이션 연동**
-  - 복원된 3D cavity volume을 FEA(Finite Element Analysis) 기반 모델과 
-    연동하여 지반 붕괴·침하 가능성을 정량적으로 예측할 수 있습니다.
+   - 복원된 3D cavity volume을 FEA(Finite Element Analysis) 기반   
+     모델과 연동하여 지반 붕괴·침하 가능성을 정량적으로 예측할 수 있습니다.
