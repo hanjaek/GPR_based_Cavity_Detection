@@ -244,3 +244,36 @@ gpr_to_cavity/
    - Neural Implicit Field 등 차세대 기법 적용 시 정밀도 향상
    - cavity뿐 아니라 도시 관로 기반 **Sinkhole 위험 예측**까지 확장 가능
    - 스마트시티·지하 안전 관리 기술의 핵심 컴포넌트로 활용될 수 있음
+
+---
+
+### 📱 서비스 프로토타입 예시 (App Prototype)
+
+<div align="center">
+
+<table>
+  <tr>
+    <td align="center">
+      <img src="img/1_app_prototype.png" width="220"><br>
+    </td>
+    <td align="center">
+      <img src="img/2_app_prototype.png" width="220"><br>
+    </td>
+    <td align="center">
+      <img src="img/3_app_prototype.png" width="220"><br>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <sub><b>Step 1. 싱크홀 뉴스 모음</b></sub>
+    </td>
+    <td align="center">
+      <sub><b>Step 2. 싱크홀 위험도 지도</b></sub>
+    </td>
+    <td align="center">
+      <sub><b>Step 3. 싱크홀 위험 알림</b></sub>
+    </td>
+  </tr>
+</table>
+
+</div>
